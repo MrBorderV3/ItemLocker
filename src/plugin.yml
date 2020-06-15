@@ -1,0 +1,15 @@
+name: ItemLocker
+version: 1.0
+main: me.border.itemlocker.ItemLocker
+author: MrBorder
+commands:
+  itemlock:
+    description: Lock an item.
+
+permissions:
+  itemlocker.lock:
+    default: op
+    description: Allows the player to use /itemlock
+  itemlocker.bypass:
+    default: op
+    description: Allows the player to bypass curse of locking
