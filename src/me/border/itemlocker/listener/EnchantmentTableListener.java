@@ -39,7 +39,7 @@ public class EnchantmentTableListener implements Listener {
         List<String> lore = meta.getLore();
         for (String loreLine : lore) {
             for (String identifier : getIdentifiers()) {
-                if (ChatColor.stripColor(loreLine).contains(identifier)) {
+                if (ChatColor.stripColor(loreLine).equalsIgnoreCase(identifier)) {
                     if (!cancelDoubleSending.contains(uuid)) {
                         p.sendMessage(Utils.ucs("Locked"));
                         cancelDoubleSending.add(uuid);

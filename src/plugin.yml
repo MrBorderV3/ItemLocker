@@ -1,6 +1,7 @@
 name: ItemLocker
 version: 1.0
 main: me.border.itemlocker.ItemLocker
+api-version: 1.16
 author: MrBorder
 commands:
   itemlock:

@@ -34,7 +34,6 @@ public class AnvilListener implements Listener {
         int slot = e.getRawSlot();
         if (slot != inventoryView.convertSlot(slot)) return;
         if (slot != 2) return;
-
         ItemStack item = inventory.getItem(0);
         ItemStack mergedWith = inventory.getItem(1);
         ItemStack result = inventory.getItem(2);
@@ -50,7 +49,7 @@ public class AnvilListener implements Listener {
                     List<String> lore = meta.getLore();
                     for (String loreLine : lore) {
                         for (String identifier : getIdentifiers()) {
-                            if (ChatColor.stripColor(loreLine).contains(identifier)) {
+                            if (ChatColor.stripColor(loreLine).equalsIgnoreCase(identifier)) {
                                 p.sendMessage(Utils.ucs("Locked"));
                                 e.setCancelled(true);
                                 return;
@@ -68,7 +67,7 @@ public class AnvilListener implements Listener {
         List<String> lore = meta.getLore();
         for (String loreLine : lore) {
             for (String identifier : getIdentifiers()) {
-                if (ChatColor.stripColor(loreLine).contains(identifier)) {
+                if (ChatColor.stripColor(loreLine).equalsIgnoreCase(identifier)) {
                     p.sendMessage(Utils.ucs("Locked"));
                     e.setCancelled(true);
                     return;
