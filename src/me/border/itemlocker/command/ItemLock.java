@@ -16,33 +16,29 @@ import java.util.List;
 public class ItemLock implements CommandExecutor {
     private ItemLocker plugin;
 
-    public ItemLock(ItemLocker plugin){
+    public ItemLock(ItemLocker plugin) {
         this.plugin = plugin;
         plugin.getCommand("itemlock").setExecutor(this);
     }
 
-    public boolean onCommand(final CommandSender sender,final Command cmd,final String label,final String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Utils.ucs("notAPlayer"));
             return true;
         }
         Player p = (Player) sender;
 
-        if (p.hasPermission("itemlocker.lock")){
-            if (p.getInventory().getItemInMainHand().getType() == Material.AIR){
-                p.sendMessage(Utils.ucs("Lock.itemNull"));
-                return true;
-            }
-            if (p.getInventory().getItemInMainHand().getItemMeta() == null){
+        if (p.hasPermission("itemlocker.lock")) {
+            if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
                 p.sendMessage(Utils.ucs("Lock.itemNull"));
                 return true;
             }
             ItemStack item = p.getInventory().getItemInMainHand();
             ItemMeta meta = p.getInventory().getItemInMainHand().getItemMeta();
-            if (meta.hasLore()){
+            if (meta.hasLore()) {
                 List<String> lore = meta.getLore();
-                for (String loreLine : lore){
+                for (String loreLine : lore) {
                     if (loreLine.contains(Utils.chat("&cCurse of Locking"))) {
                         p.sendMessage(Utils.ucs("Lock.alreadyLocked"));
                         return true;
@@ -55,6 +51,7 @@ public class ItemLock implements CommandExecutor {
                 p.sendMessage(Utils.ucs("Lock.success"));
                 return true;
             }
+
             List<String> lore = new ArrayList<>();
             lore.add(Utils.chat("&cCurse of Locking"));
             meta.setLore(lore);

@@ -6,3 +6,7 @@ Lock:
   itemNull: '&cYou must have an item in your hand to use this command!'
   success: '&aSuccessfully locked your item!'
   alreadyLocked: '&cThis item is already locked!'
+
+Identifiers:
+  - "Curse Of Locking"
+  - "Locked"

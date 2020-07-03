@@ -2,6 +2,7 @@ package me.border.itemlocker.listener;
 
 import me.border.itemlocker.ItemLocker;
 import me.border.itemlocker.util.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,24 +26,33 @@ public class EnchantmentTableListener implements Listener {
     public void onEnchant(PrepareItemEnchantEvent e) {
         ItemStack item = e.getItem();
         Player p = e.getEnchanter();
-        if (p.hasPermission("itemlocker.bypass")) return;
-        final UUID uuid = p.getUniqueId();
+        if (p.hasPermission("itemlocker.bypass"))
+            return;
+        UUID uuid = p.getUniqueId();
 
-        if (!item.hasItemMeta()) return;
+        if (!item.hasItemMeta())
+            return;
         ItemMeta meta = item.getItemMeta();
-        if (!meta.hasLore()) return;
+        if (!meta.hasLore())
+            return;
 
         List<String> lore = meta.getLore();
         for (String loreLine : lore) {
-            if (loreLine.contains(Utils.chat("&cCurse of Locking"))) {
-                if (!cancelDoubleSending.contains(uuid)) {
-                    p.sendMessage(Utils.ucs("Locked"));
-                    cancelDoubleSending.add(uuid);
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> cancelDoubleSending.remove(uuid), 2L);
+            for (String identifier : getIdentifiers()) {
+                if (ChatColor.stripColor(loreLine).contains(identifier)) {
+                    if (!cancelDoubleSending.contains(uuid)) {
+                        p.sendMessage(Utils.ucs("Locked"));
+                        cancelDoubleSending.add(uuid);
+                        plugin.getServer().getScheduler().runTaskLater(plugin, () -> cancelDoubleSending.remove(uuid), 2L);
+                    }
+                    e.setCancelled(true);
+                    return;
                 }
-                e.setCancelled(true);
-                return;
             }
         }
+    }
+
+    private List<String> getIdentifiers(){
+        return ItemLocker.identifiers;
     }
 }
