@@ -1,5 +1,8 @@
 package me.border.itemlocker.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import me.border.itemlocker.ItemLocker;
 import me.border.itemlocker.util.Utils;
 import org.bukkit.ChatColor;
@@ -9,13 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import org.bukkit.plugin.Plugin;
 
 public class EnchantmentTableListener implements Listener {
     private ItemLocker plugin;
+
     private List<UUID> cancelDoubleSending = new ArrayList<>();
 
     public EnchantmentTableListener(ItemLocker plugin) {
@@ -29,21 +30,19 @@ public class EnchantmentTableListener implements Listener {
         if (p.hasPermission("itemlocker.bypass"))
             return;
         UUID uuid = p.getUniqueId();
-
         if (!item.hasItemMeta())
             return;
         ItemMeta meta = item.getItemMeta();
         if (!meta.hasLore())
             return;
-
         List<String> lore = meta.getLore();
         for (String loreLine : lore) {
             for (String identifier : getIdentifiers()) {
                 if (ChatColor.stripColor(loreLine).equalsIgnoreCase(identifier)) {
-                    if (!cancelDoubleSending.contains(uuid)) {
+                    if (!this.cancelDoubleSending.contains(uuid)) {
                         p.sendMessage(Utils.ucs("Locked"));
-                        cancelDoubleSending.add(uuid);
-                        plugin.getServer().getScheduler().runTaskLater(plugin, () -> cancelDoubleSending.remove(uuid), 2L);
+                        this.cancelDoubleSending.add(uuid);
+                        this.plugin.getServer().getScheduler().runTaskLater((Plugin)this.plugin, () -> this.cancelDoubleSending.remove(uuid), 2L);
                     }
                     e.setCancelled(true);
                     return;
@@ -52,7 +51,7 @@ public class EnchantmentTableListener implements Listener {
         }
     }
 
-    private List<String> getIdentifiers(){
+    private List<String> getIdentifiers() {
         return ItemLocker.identifiers;
     }
 }
